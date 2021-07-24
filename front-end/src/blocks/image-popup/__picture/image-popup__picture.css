@@ -1,0 +1,32 @@
+.image-popup__picture {
+  max-height: 600px;
+  max-width: 800px;
+  object-fit: contain;
+  z-index: 10002;
+
+  position: relative;
+}
+
+@media (max-width: 1000px) {
+  .image-popup__picture {
+    max-width: 600px;
+    margin: auto;
+  }
+}
+@media (max-width: 700px) {
+  .image-popup__picture {
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 510px) {
+  .image-popup__picture {
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 320px) {
+  .image-popup__picture {
+    max-width: 240px;
+  }
+}

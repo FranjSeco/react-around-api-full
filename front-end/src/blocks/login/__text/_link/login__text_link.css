@@ -1,0 +1,9 @@
+.login__text_link {
+    cursor: pointer;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.login__text_link:hover {
+    border-bottom: 2px solid #cccccc;
+}

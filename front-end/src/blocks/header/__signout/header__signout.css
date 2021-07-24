@@ -1,0 +1,18 @@
+.header__signout {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+
+  text-align: right;
+
+  color: #a9a9a9;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 650px) {
+  .header__signout {
+    margin: 18px auto 40px auto;
+  }
+}

@@ -1,0 +1,20 @@
+@import url('./__title/register__title.css');
+@import url('./__form/register__form.css');
+@import url('./__form-email/register__form-email.css');
+@import url('./__form-password/register__form-password.css');
+@import url('./__submit/register__submit.css');
+@import url('./__text/register__text.css');
+
+.register {
+    max-width: 358px;
+    height: 100%;
+    margin: 20px auto 20px auto;
+    background-color: black;
+}
+
+@media (max-width: 400px) {
+    .register {
+        max-width: 260px;
+        margin-top: 0;
+    }
+}

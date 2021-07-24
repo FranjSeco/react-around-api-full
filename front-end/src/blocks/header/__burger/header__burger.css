@@ -1,0 +1,32 @@
+@import url('./_open/header__burger_open.css');
+@import url('./_close/header__burger_close.css');
+
+.header__burger {
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 10;
+  display: flex;
+}
+
+.header__burger:focus {
+  outline: none;
+}
+
+/* @media (min-width: 321px) {
+  .header__burger {
+    display: none;
+  }
+} */

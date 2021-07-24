@@ -1,0 +1,31 @@
+.close-icon {
+  max-width: 58px;
+  height: 58px;
+  width: 100%;
+  z-index: 11000;
+  position: absolute;
+  right: -50px;
+  top: -50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+
+
+  background-image: url("../../images/CloseIcon.svg");
+  background-color: rgba(0, 0, 0, 0);
+  background-position: center center;
+  background-size: contain;
+}
+
+.close-icon:hover {
+  opacity: .6;
+}
+
+@media (max-width: 410px) {
+  .close-icon {
+    right: -11px;
+    top: -60px;
+  }
+}

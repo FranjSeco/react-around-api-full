@@ -1,0 +1,21 @@
+.profile__avatar {
+  display: flex;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  position: relative;
+  background: #fff;
+  background: none;
+  z-index: 1;
+}
+
+.profile__avatar:hover {
+  background: rgba(0, 0, 0, .8);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 26px 26px;
+  cursor: pointer;
+  background-image: url("../../../images/avatarEdit.svg");
+}
+
+

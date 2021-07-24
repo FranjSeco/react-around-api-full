@@ -1,0 +1,33 @@
+/* IMPORTS */
+
+@import url("./normalize/normalize.css");
+@import url("./fonts/fonts.css");
+@import url("./Page.css");
+
+@import url("./blocks//popup/popup.css");
+
+@import url("./blocks/header/header.css");
+@import url("./blocks/login/login.css");
+@import url("./blocks/register/register.css");
+@import url("./blocks/main/main.css");
+@import url("./blocks/profile/profile.css");
+@import url("./blocks/elements/elements.css");
+@import url("./blocks/element/element.css");
+@import url("./blocks/footer/footer.css");
+@import url("./blocks/close-icon/close-icon.css");
+@import url("./blocks/overlay/overlay.css");
+
+@import url("./blocks/image-popup/image-popup.css");
+
+@import url("./blocks/overlay/_popup/overlay_popup.css");
+
+@import url("./blocks/form-input/_type_error/form-input_type_error.css");
+@import url("./blocks/form-input/error-active/form-input-error_active.css");
+@import url("./blocks/form-submit/_inactive/form-submit_inactive.css");
+@import url("./blocks/element/__trash/_display/element__trash_display.css");
+@import url("./blocks/element/__like-counter/_display/element__like-counter_display.css");
+
+
+* {
+    background-color: #000;
+}

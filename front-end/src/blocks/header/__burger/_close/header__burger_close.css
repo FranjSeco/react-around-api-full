@@ -1,0 +1,17 @@
+.header__burger_close {
+    background-color: #fff;
+    width: 30px;
+    height: 3px;
+    margin: 4px 0 0 10px;
+    right: 100px;
+}
+
+.header__burger_close:nth-child(1) {
+    transform: rotate(45deg) translateY(14px) ;
+}
+.header__burger_close:nth-child(2) {
+    opacity: 0;
+}
+.header__burger_close:nth-child(3) {
+    transform: rotate(-45deg) translateY(-14px) ;
+}

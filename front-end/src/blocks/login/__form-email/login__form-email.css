@@ -1,0 +1,12 @@
+.login__form-email {
+    background-color: black;
+    border: none;
+    border-bottom: 2px solid #cccccc;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    color: #cccccc;
+    margin-bottom: 30px;
+    width: 100%;
+}

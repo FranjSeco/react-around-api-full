@@ -1,0 +1,9 @@
+@import url('./_notok/popup__image_notok.css');
+@import url('./_ok/popup__image_ok.css');
+
+.popup__image {
+    width: 120px;
+    height: 120px;
+    background-color: #fff;
+    margin: 60px auto 0 auto;
+}

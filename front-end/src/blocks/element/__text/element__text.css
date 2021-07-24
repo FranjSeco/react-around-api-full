@@ -1,0 +1,10 @@
+.element__text {
+  width: 282px;
+  padding: 25px 0 31px 0;
+  background-color: #fff;
+  border-radius: 0 0 10px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}

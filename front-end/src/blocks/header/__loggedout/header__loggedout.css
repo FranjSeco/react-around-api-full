@@ -1,0 +1,15 @@
+.header__loggedout {
+  position: absolute;
+  right: 27px;
+  bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 30px 0;
+}
+
+
+@media (max-width: 320px) {
+  .header__loggedout {
+    /* bottom: 0px; */
+  }
+}

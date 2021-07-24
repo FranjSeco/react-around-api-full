@@ -1,0 +1,16 @@
+.header__loggedin {
+  position: absolute;
+  right: 30px;
+  bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 10px 0;
+}
+
+
+
+@media (max-width: 600px) {
+  .header__loggedin {
+    bottom: 0px;
+  }
+}

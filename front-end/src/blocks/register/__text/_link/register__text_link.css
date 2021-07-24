@@ -1,0 +1,9 @@
+.register__text_link {
+    cursor: pointer;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.register__text_link:hover {
+    border-bottom: 2px solid #cccccc;
+}

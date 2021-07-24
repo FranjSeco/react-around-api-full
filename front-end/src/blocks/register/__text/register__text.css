@@ -1,0 +1,12 @@
+@import url('./_link/register__text_link.css');
+
+.register__text {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+
+  text-align: center;
+
+  color: #ffffff;
+}
