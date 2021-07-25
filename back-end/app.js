@@ -5,6 +5,9 @@ const mongoose = require('mongoose');
 const auth = require('./middlewares/auth')
 const { celebrate, Joi } = require('celebrate');
 
+const {BadRequest, NotAllowed} = require('../middlewares/errorHandling');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+
 require('dotenv').config();
 
 const cors = require('cors');
@@ -40,6 +43,7 @@ app.use(express.json());
 // });
 
 app.use(cors());
+app.use(requestLogger);
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
@@ -61,9 +65,23 @@ app.use(auth);
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
 
+app.use(errorLogger); // enabling the error logger
+
+app.use(errors()); // celebrate error handler
 
 app.get('*', (req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });
+});
+
+app.use((err, req, res, next) => {
+  if(err.statusCode === 500) {
+    res.status(500).send({ message: 'An error occurred on the server' });
+  } else if (err.statusCode === 401) {
+    throw new NotAllowed('Something went wrong');
+  } else if (err.statusCode === 400) {
+    throw new BadRequest('Bad Request');
+  }
+
 });
 
 app.listen(PORT, () => {

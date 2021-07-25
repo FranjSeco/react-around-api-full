@@ -2,14 +2,22 @@ const bcrypt = require('bcryptjs');
 const UserModel = require('../models/users');
 const jwt = require('jsonwebtoken');
 
+const {NotFoundError} = require('../middlewares/errorHandling');
+
 const currentUser = (req, res) => {
   UserModel.findById(
     req.user._id,
     { name: req.body.name, about: req.body.about },
     { runValidators: true, new: true },
   )
-  .then(user => res.send(user))
-  .catch(err => res.send(err))
+  .then(user => {
+    if (!user) {
+      throw new NotFoundError('No user with matching ID found');
+    }
+    res.send(user)
+  })
+  // .catch(err => res.send(err))
+  .catch(next)
 }
 
 const getAllUsers = (req, res) =>
@@ -22,17 +30,21 @@ const getAllUsers = (req, res) =>
 const getUser = (req, res) => UserModel.findById(req.params._id)
   .then((user) => {
     if (!user) {
-      return res.status(404).send({ message: 'User not found' });
+      throw new NotFoundError('No user with matching ID found');
     }
     return res.status(200).send({ data: user });
   })
-  .catch((err) => {
-    if (err.name === 'CastError') {
-      res.status(400).send({ message: err });
-    } else {
-      res.status(500).send({ message: 'Internal Server Error' });
-    }
-  });
+  // .catch(
+  //   (err) => {
+  //   if (err.name === 'CastError') {
+  //     res.status(400).send({ message: err });
+  //   } else {
+  //     res.status(500).send({ message: 'Internal Server Error' });
+  //   }
+  // }
+  // );
+
+  .catch(next)
 
 const createUser = (req, res) => {
   // const { name, about, avatar, email, password } = req.body;
@@ -47,12 +59,13 @@ const createUser = (req, res) => {
       })
     })
     .then((user) => res.status(200).send({ data: user }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({ message: err });
-      }
-      res.status(500).send({ message: err });
-    });
+    // .catch((err) => {
+    //   if (err.name === 'ValidationError') {
+    //     res.status(400).send({ message: err });
+    //   }
+    //   res.status(500).send({ message: err });
+    // });
+    .catch(next)
 };
 
 const updateUser = (req, res) => {
@@ -64,10 +77,9 @@ const updateUser = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: 'User not found' });
-      } else {
-        res.status(200).send({ data: user });
+        throw new NotFoundError('No user with matching ID found');
       }
+      return res.status(200).send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -105,6 +117,9 @@ const login = (req, res) => {
   const { email, password } = req.body;
   return UserModel.findUserByCredentials(email, password)
     .then((user) => {
+      if (!user) {
+        throw new NotFoundError('No user with matching ID found');
+      }
       // authentication successful! user is in the user variable
       const token = jwt.sign({ _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',

@@ -1,7 +1,12 @@
 /* eslint-disable no-undef */
 const userRouter = require('express').Router();
 
+function validateUrl(string) {
+  return validator.isURL(string);
+}
+
 const { celebrate, Joi } = require('celebrate');
+
 const {
   getUser, getAllUsers, updateUser, updateAvatar, currentUser
 } = require('../controllers/users');
@@ -34,7 +39,7 @@ userRouter.patch('/me', celebrate({
 
 userRouter.patch('/me/avatar', celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required().uri(),
+    avatar: Joi.string().required().custom(validateUrl),
   }),
 }), updateAvatar);
 
