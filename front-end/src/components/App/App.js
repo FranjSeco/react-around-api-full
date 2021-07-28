@@ -69,14 +69,14 @@ function App() {
     if (email, password) {
       auth.register(email, password)
         .then(res => {
-          console.log(res)
           if (!res) {
             handleSuccess(false);
             history.push('/signin')
             return res;
           } else {
+            console.log(res)
             handleSuccess(true);
-            history.push('/signin')
+            history.push('/signin');
             return res;
           }
         })
