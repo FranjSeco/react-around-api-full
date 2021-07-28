@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const UserModel = require('../models/users');
 const jwt = require('jsonwebtoken');
 
-const {NotFoundError} = require('../middlewares/errorHandling');
+const { NotFoundError } = require('../middlewares/errorHandling');
 
 const currentUser = (req, res) => {
   UserModel.findById(
@@ -10,22 +10,21 @@ const currentUser = (req, res) => {
     { name: req.body.name, about: req.body.about },
     { runValidators: true, new: true },
   )
-  .then(user => {
-    if (!user) {
-      throw new NotFoundError('No user with matching ID found');
-    }
-    res.send(user)
-  })
-  // .catch(err => res.send(err))
-  .catch(next)
+    .then(user => {
+      if (!user) {
+        throw new NotFoundError('No user with matching ID found');
+      }
+      res.send(user)
+    })
+    // .catch(err => res.send(err))
+    .catch(next)
 }
 
-const getAllUsers = (req, res) =>
-  {
-    UserModel.find({})
+const getAllUsers = (req, res) => {
+  UserModel.find({})
     .then((users) => { res.status(200).send({ data: users }); })
     .catch((err) => { res.status(400).send(err); });
-  }
+}
 
 const getUser = (req, res) => UserModel.findById(req.params._id)
   .then((user) => {
@@ -109,8 +108,6 @@ const updateAvatar = (req, res) => {
     });
 };
 
-
-
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const login = (req, res) => {
@@ -124,16 +121,15 @@ const login = (req, res) => {
       const token = jwt.sign({ _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         { expiresIn: '7d' });
-      return res.status(200).send({ token });
+
+      res.cookie("jwt", token, {
+        maxAge: 3600000 * 24 * 7,
+        httpOnly: true,
+      });
+
+      res.status(200).send({ token });
     })
-    .then(payload => {
-      req.user = payload;
-      next();
-    })
-    .catch((err) => {
-      // authentication error
-      res.status(401).send({ message: err.message });
-    })
+    .catch(next)
 }
 
 module.exports = {

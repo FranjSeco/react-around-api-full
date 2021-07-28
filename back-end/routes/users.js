@@ -11,7 +11,7 @@ const {
   getUser, getAllUsers, updateUser, updateAvatar, currentUser
 } = require('../controllers/users');
 
-userRouter.get('/me', currentUser)
+// userRouter.get('/me', currentUser)
 
 userRouter.get('/', getAllUsers);
 

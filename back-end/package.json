@@ -8,18 +8,18 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "lint": "eslint .",
-    "deploy": "npm run build && scp -r ./build/* franjseco@aroundusfran.students.nomoreparties.site:/home/franjseco/back-end"
+    "deploy": "scp -r ./* franjseco@newus.students.nomoreparties.site:/home/franjseco/back-end"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FranjSeco/around-express.git"
+    "url": "git+https://github.com/FranjSeco/react-around-api-full/back-end.git"
   },
   "author": "Francisco Seco",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/FranjSeco/around-express/issues"
+    "url": "https://github.com/FranjSeco/react-around-api-full/back-end/issues"
   },
-  "homepage": "https://github.com/FranjSeco/around-express#readme",
+  "homepage": "https://github.com/FranjSeco/react-around-api-full/back-end#readme",
   "devDependencies": {
     "eslint": "^7.29.0",
     "eslint-config-airbnb-base": "^14.2.1",
@@ -33,10 +33,13 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-winston": "^4.1.0",
     "helmet": "^4.6.0",
     "joi": "^17.4.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.0",
-    "validator": "^13.6.0"
+    "react-scripts": "^4.0.3",
+    "validator": "^13.6.0",
+    "winston": "^3.3.3"
   }
 }

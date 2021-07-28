@@ -1,13 +1,12 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import * as auth from '../../utils/auth';
 
 
 
-const Login = ({handleLogin, handleEmail}) => {
+const Login = ({handleLogin}) => {
     const [userPassword, setUserPassword] = React.useState('');
     const [userEmail, setUserEmail] = React.useState('');
-    const [message, setMessage] = React.useState('');
+    // const [message, setMessage] = React.useState('');
 
     const history = useHistory();
 
@@ -18,30 +17,35 @@ const Login = ({handleLogin, handleEmail}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!userEmail || !userPassword) {
-            return;
+        handleLogin(userEmail, userPassword);
+        if(localStorage.getItem('jwt')) {
+            history.push('/app');
         }
-        console.log(userEmail)
-        auth.authorize(userEmail, userPassword)
-
-            .then((data) => {
-                if (!data) {
-                    
-                    throw new Error('Error!')
-                }
-                else if (data.token) {
-                    handleLogin();
-                }
-            })
-            .then(resetForm)
-            .then(() => {
-                handleEmail(userEmail);
-                history.push('/app')
-            })
-            .catch(err => {
-                setMessage(err.message)
-                console.log(message);
-            })
+        resetForm();
+        // if (!userEmail || !userPassword) {
+        //     return;
+        // }
+        // console.log(userEmail)
+        // auth.authorize(userEmail, userPassword)
+        //     .then((data) => {
+        //         if (!data) {
+        //             console.log('1')
+        //             throw new Error('Error!')
+        //         }
+        //         else if (data.token) {
+        //             console.log(data.token)
+        //             handleLogin();
+        //         }
+        //     })
+        //     .then(resetForm)
+        //     .then(() => {
+        //         handleEmail(userEmail);
+        //         history.push('/app')
+        //     })
+        //     .catch(err => {
+        //         setMessage(err.message)
+        //         console.log(message);
+        //     })
     }
 
     // React.useEffect(() => {

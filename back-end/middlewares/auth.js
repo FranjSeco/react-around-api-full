@@ -4,6 +4,7 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 const auth = (req, res, next) => {
   // getting authorization from the header
   const { authorization } = req.headers;
+  console.log(authorization)
 
   // let's check the header exists and starts with 'Bearer '
   if (!authorization || !authorization.startsWith('Bearer ')) {
@@ -18,7 +19,10 @@ const auth = (req, res, next) => {
 
   try {
     // trying to verify the token
-    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',);
+    payload = jwt.verify(
+      token,
+      NODE_ENV === "production" ? JWT_SECRET : "some-secret-key",
+    );
 
   } catch (err) {
     // we return an error if something goes wrong

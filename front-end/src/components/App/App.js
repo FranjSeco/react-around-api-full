@@ -39,6 +39,7 @@ function App() {
   const [isInfoToolOpen, setIsInfoToolOpen] = React.useState(false);
   const [success, setSuccess] = React.useState();
   const [email, setEmail] = React.useState('');
+  const [message, setMessage] = React.useState('');
   const history = useHistory();
   // REGISTER
   // LOGIN
@@ -48,17 +49,76 @@ function App() {
   // API
 
   const api = new Api({
-    baseUrl: "https://around.nomoreparties.co/v1/group-7",
+    // baseUrl: "https://around.nomoreparties.co/v1/group-7",
+    baseUrl: 'http://localhost:3000',
+    // baseUrl: "https://api.newus.students.nomoreparties.site",
     headers: {
-      Authorization: `Bearer ${token}`,
+      authorization: `Bearer ${token}`,
+      // authorization: "3199dd72-198f-4d27-96ce-739071f3c183",
       'content-type': 'application/json',
     }
   });
 
   // PAGE
-  const handleLogin = () => {
-    setIsLoggedIn(true);
+  // const handleLogin = () => {
+  //   setIsLoggedIn(true);
+  //   handleCheckTkn();
+  // }
+
+  const handleRegistration = (email, password) => {
+    if (email, password) {
+      auth.register(email, password)
+        .then(res => {
+          console.log(res)
+          if (!res) {
+            handleSuccess(false);
+            history.push('/signin')
+            return res;
+          } else {
+            handleSuccess(true);
+            history.push('/signin')
+            return res;
+          }
+        })
+        .then(handlePopup)
+        .catch(err => {
+          handleSuccess(false);
+          handlePopup();
+          console.log(message);
+        })
+    } else {
+      return setMessage('Something went wrong!');
+    }
+
   }
+
+  const handleLogin = (email, password) => {
+    if (email, password) {
+      console.log(email, password)
+      auth.authorize(email, password)
+        .then(res => {
+          console.log(res)
+          if (!res) {
+            console.log('No Access')
+          }
+            console.log('Access')
+            handleCheckTkn();
+            handleEmail(email);
+            history.push('/app')
+          
+        })
+        .catch(err => {
+          setMessage(err.message)
+          console.log(message);
+        })
+    }
+
+  }
+
+  const handleEmail = (x) => {
+    setEmail(x);
+  }
+
 
   const handleSignOut = () => {
     localStorage.removeItem('jwt');
@@ -71,58 +131,79 @@ function App() {
     setIsInfoToolOpen(true);
   }
 
-
   const handleSuccess = (x) => {
     setSuccess(x);
   }
 
-  const handleEmail = (x) => {
-    setEmail(x);
-  }
-
-
-  React.useEffect(() => {
+  const handleCheckTkn = () => {
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
       auth.getContent(jwt)
         .then(res => {
           if (res) {
+            console.log(jwt, res)
             const currentEmail = res.data.email;
             setEmail(currentEmail);
             setIsLoggedIn(true);
-            history.push('./app');
+            history.push('/app');
             setToken(jwt);
           }
-
         })
         .catch(err => console.log(err))
+    } else {
+      return;
     }
-  }, [token])
+  }
+
+
+  // React.useEffect(() => {
+  //   handleCheckTkn();
+  // }, [token])
 
   // APP
 
   React.useEffect(() => {
-    api.getUserInfo()
-      .then(res => {
-        setCurrentUser(res);
-      })
-      .catch((err) => {
-        console.log(`${err}`);
-      });
-  }, [])
+    if (token) {
+      api.getUserInfo()
+        .then(res => {
+          setCurrentUser(res);
+        })
+        .catch((err) => {
+          console.log(`${err}`);
+        });
+
+      api.getInitialCards()
+        .then(data => {
+          setCards(data);
+        })
+        .catch((err) => {
+          console.log(`${err}`);
+        });
+    }
+  }, [token])
+
+  // React.useEffect(() => {
+  //   api.getUserInfo()
+  //     .then(res => {
+  //       setCurrentUser(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(`${err}`);
+  //     });
+  // }, [token])
 
 
-  //INITIAL CARDS
+  // //INITIAL CARDS
 
-  React.useEffect(() => {
-    api.getInitialCards()
-      .then(data => {
-        setCards(data);
-      })
-      .catch((err) => {
-        console.log(`${err}`);
-      });
-  }, [])
+  // React.useEffect(() => {
+  //   api.getInitialCards()
+  //     .then(data => {
+  //       setCards(data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(`${err}`);
+  //     });
+  // }, [token])
 
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -226,7 +307,7 @@ function App() {
             exact path="/app" loggedIn={isLoggedIn} />
 
           <Route path="/signup">
-            <Register handleInfoTool={handlePopup} handleSuccess={handleSuccess} />
+            <Register handleRegistration={handleRegistration} />
           </Route>
 
           <Route path="/signin">
@@ -275,10 +356,10 @@ function App() {
           onClose={closeAllPopups}
         />
 
-        
+
       </CurrentUserContext.Provider>
 
-      
+
 
     </div>
 

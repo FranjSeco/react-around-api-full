@@ -3,9 +3,9 @@ const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 const auth = require('./middlewares/auth')
-const { celebrate, Joi } = require('celebrate');
+const { celebrate, Joi, errors  } = require('celebrate');
 
-const {BadRequest, NotAllowed} = require('../middlewares/errorHandling');
+const {BadRequest, NotAllowed} = require('./middlewares/errorHandling');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 require('dotenv').config();
@@ -16,16 +16,19 @@ const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 
 const {
-  createUser, login,
+  createUser, login, currentUser,
 } = require('./controllers/users');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
 
+app.use(cors());
+app.options("*", cors());
+
 app.use(helmet());
 
-mongoose.connect('mongodb://localhost:27017/aroundb', {
+mongoose.connect('mongodb://localhost:27017/api-full', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -42,7 +45,13 @@ app.use(express.json());
 //   next();
 // });
 
-app.use(cors());
+
+
+// const corsOptions = {
+//   origin: 'https://newus.students.nomoreparties.site',
+//   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+// }
+
 app.use(requestLogger);
 
 app.post('/signup', celebrate({
@@ -59,15 +68,14 @@ app.post('/signin', celebrate({
   }).unknown(true),
 }), login);
 
-// authorization
-app.use(auth);
 
+// AUTH
+
+app.use(auth);
+app.use('/users/me', currentUser);
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
 
-app.use(errorLogger); // enabling the error logger
-
-app.use(errors()); // celebrate error handler
 
 app.get('*', (req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });
@@ -83,6 +91,10 @@ app.use((err, req, res, next) => {
   }
 
 });
+
+app.use(errorLogger); // enabling the error logger
+
+app.use(errors()); // celebrate error handler
 
 app.listen(PORT, () => {
   console.log(`Link to the server: ${PORT}`);

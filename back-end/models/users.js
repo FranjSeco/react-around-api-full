@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -49,7 +50,8 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials (email
             return Promise.reject(new Error('Incorrect email or password'));
           }
 
-          return res.status(200).send({email}); // now user is available
+          // return res.status(200).send({email}); // now user is available
+          return user;
         })
         .catch(err => res.status(400).send({message: err}))
     })
