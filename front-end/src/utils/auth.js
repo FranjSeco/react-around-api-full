@@ -1,7 +1,7 @@
 // export const BASE_URL = 'https://register.nomoreparties.co';
 export const BASE_URL = 'http://localhost:3000';
 // export const BASE_URL = "https://api.newus.students.nomoreparties.site";
-// export const BASE_URL = '';  
+
 
 // const  responseCheck = (res) => {
 //     return res.ok ? res.json() : Promise.reject(`Error!` + res.statusText);
@@ -40,25 +40,24 @@ export const authorize = (email, password) => {
         })
         .then((data) => {
             localStorage.setItem('jwt', data.token);
-            console.log(data)
             return data;
         })
         .catch((err) => console.log(err));
 }
 
-export const getContent = (idNumber) => {
+export const getContent = (token) => {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'GET',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${idNumber}`
+            Authorization: `Bearer ${token}`
         }
     })
-        .then((res) => {
-            console.log(res)
-            return res.json()
+        .then(res => res.ok ? res.json() : Promise.reject(res.statusText))
+        .then((data) => {
+            console.log(data)
+            return data;
         })
-        .then((data) => data)
         .catch((err) => console.log(err));
 }

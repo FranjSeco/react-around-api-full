@@ -89,18 +89,13 @@ function App() {
     } else {
       return setMessage('Something went wrong!');
     }
-
   }
-
   
-
   const handleLogin = (email, password) => {
       console.log('we are here 1', email, password)
       auth.authorize(email, password)
-        .then((res) => {
-          console.log( 'res is ', res)
-          auth.getContent(res.token)
-            .then(res => console.log('we are here 3', res))
+        .then(() => {
+          handleCheckTkn();
         })
         .catch(err => {
           console.log('catch reached')
@@ -108,16 +103,15 @@ function App() {
         })
   }
 
-
-
-
-
   const handleCheckTkn = () => {
+    console.log('we are here 2')
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
+      console.log('we are here 3')
       auth.getContent(jwt)
         .then(res => {
           if (res) {
+            console.log('we are here 4', res)
             const currentEmail = res.data.email;
             setEmail(currentEmail);
             setIsLoggedIn(true);
