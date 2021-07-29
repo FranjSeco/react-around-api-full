@@ -21,7 +21,7 @@ const auth = (req, res, next) => {
     // trying to verify the token
     payload = jwt.verify(
       token,
-      NODE_ENV === "production" ? JWT_SECRET : "some-secret-key",
+      NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
     );
 
   } catch (err) {

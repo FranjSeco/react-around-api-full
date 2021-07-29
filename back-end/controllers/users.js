@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const { NotFoundError } = require('../middlewares/errorHandling');
 
 const currentUser = (req, res) => {
+  console.log(req)
   UserModel.findById(
     req.user._id,
     { name: req.body.name, about: req.body.about },
@@ -110,12 +111,12 @@ const updateAvatar = (req, res) => {
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
   return UserModel.findUserByCredentials(email, password)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('No user with matching ID found');
+        return Promise.reject(new Error('Incorrect email or password'));
       }
       // authentication successful! user is in the user variable
       const token = jwt.sign({ _id: user._id },

@@ -66,7 +66,7 @@ function App() {
   // }
 
   const handleRegistration = (email, password) => {
-    if (email, password) {
+    if (email && password) {
       auth.register(email, password)
         .then(res => {
           if (!res) {
@@ -92,27 +92,43 @@ function App() {
 
   }
 
+  
+
   const handleLogin = (email, password) => {
-    if (email, password) {
-      console.log(email, password)
+      console.log('we are here 1', email, password)
       auth.authorize(email, password)
-        .then(res => {
-          console.log(res)
-          if (!res) {
-            console.log('No Access')
-          }
-            console.log('Access')
-            handleCheckTkn();
-            handleEmail(email);
-            history.push('/app')
-          
+        .then((res) => {
+          console.log( 'res is ', res)
+          auth.getContent(res.token)
+            .then(res => console.log('we are here 3', res))
         })
         .catch(err => {
+          console.log('catch reached')
           setMessage(err.message)
-          console.log(message);
         })
-    }
+  }
 
+
+
+
+
+  const handleCheckTkn = () => {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      auth.getContent(jwt)
+        .then(res => {
+          if (res) {
+            const currentEmail = res.data.email;
+            setEmail(currentEmail);
+            setIsLoggedIn(true);
+            history.push('/app');
+            setToken(jwt);
+          }
+        })
+        .catch(err => console.log(err))
+    } else {
+      return;
+    }
   }
 
   const handleEmail = (x) => {
@@ -135,25 +151,7 @@ function App() {
     setSuccess(x);
   }
 
-  const handleCheckTkn = () => {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-      auth.getContent(jwt)
-        .then(res => {
-          if (res) {
-            console.log(jwt, res)
-            const currentEmail = res.data.email;
-            setEmail(currentEmail);
-            setIsLoggedIn(true);
-            history.push('/app');
-            setToken(jwt);
-          }
-        })
-        .catch(err => console.log(err))
-    } else {
-      return;
-    }
-  }
+  
 
 
   // React.useEffect(() => {
