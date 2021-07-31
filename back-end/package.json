@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
     "dev": "nodemon app.js",
+    "debugger": "node --inspect-brk app.js",
     "lint": "eslint .",
     "deploy": "scp -r ./* franjseco@newus.students.nomoreparties.site:/home/franjseco/back-end"
   },

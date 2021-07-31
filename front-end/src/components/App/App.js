@@ -34,7 +34,6 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({});
   const [cardToBeDeleted, setCardToBeDeleted] = React.useState({});
   const [cards, setCards] = React.useState([]);
-  const [currentUser, setCurrentUser] = React.useState({});
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isInfoToolOpen, setIsInfoToolOpen] = React.useState(false);
   const [success, setSuccess] = React.useState();
@@ -45,6 +44,7 @@ function App() {
   // LOGIN
   // JWT
   const [token, setToken] = React.useState('');
+  const [currentUser, setCurrentUser] = React.useState({});
 
   // API
 
@@ -53,9 +53,9 @@ function App() {
     baseUrl: 'http://localhost:3000',
     // baseUrl: "https://api.newus.students.nomoreparties.site",
     headers: {
-      authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
       // authorization: "3199dd72-198f-4d27-96ce-739071f3c183",
-      'content-type': 'application/json',
+      'content-type': 'application/json'
     }
   });
 
@@ -74,7 +74,8 @@ function App() {
             history.push('/signin')
             return res;
           } else {
-            console.log(res)
+            console.log(res.data)
+            setCurrentUser(res.data);
             handleSuccess(true);
             history.push('/signin');
             return res;
@@ -90,45 +91,51 @@ function App() {
       return setMessage('Something went wrong!');
     }
   }
-  
+
   const handleLogin = (email, password) => {
-      console.log('we are here 1', email, password)
-      auth.authorize(email, password)
-        .then(() => {
-          handleCheckTkn();
-        })
-        .catch(err => {
-          console.log('catch reached')
-          setMessage(err.message)
-        })
+    auth.authorize(email, password)
+      .then(({ token }) => {
+        if (token) {
+          localStorage.setItem('jwt', token);
+          setToken(token);
+          setIsLoggedIn(true);
+          setEmail(email);
+          history.push('/app');
+          return;
+        }
+        console.log('not loged')
+        history.push('/signup');
+      })
+      .catch(err => {
+        console.log('catch reached')
+        setMessage(err.message)
+      })
   }
 
   const handleCheckTkn = () => {
-    console.log('we are here 2')
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
-      console.log('we are here 3')
-      auth.getContent(jwt)
-        .then(res => {
+      auth.checkToken(jwt)
+        .then((res) => {
           if (res) {
-            console.log('we are here 4', res)
-            const currentEmail = res.data.email;
-            setEmail(currentEmail);
+            console.log(currentUser)
+            setEmail(currentUser.email);
             setIsLoggedIn(true);
             history.push('/app');
             setToken(jwt);
           }
         })
         .catch(err => console.log(err))
-    } else {
-      return;
-    }
+    } 
   }
+
+  React.useEffect(() => {
+    handleCheckTkn();
+  }, [])
 
   const handleEmail = (x) => {
     setEmail(x);
   }
-
 
   const handleSignOut = () => {
     localStorage.removeItem('jwt');
@@ -145,20 +152,14 @@ function App() {
     setSuccess(x);
   }
 
-  
-
-
-  // React.useEffect(() => {
-  //   handleCheckTkn();
-  // }, [token])
-
   // APP
 
   React.useEffect(() => {
     if (token) {
       api.getUserInfo()
         .then(res => {
-          setCurrentUser(res);
+          console.log(res)
+          setCurrentUser(res.data);
         })
         .catch((err) => {
           console.log(`${err}`);
@@ -166,47 +167,14 @@ function App() {
 
       api.getInitialCards()
         .then(data => {
-          setCards(data);
+          setCards(data.data);
         })
         .catch((err) => {
           console.log(`${err}`);
         });
     }
-  }, [token])
+  }, [token, CurrentUserContext])
 
-  // React.useEffect(() => {
-  //   api.getUserInfo()
-  //     .then(res => {
-  //       setCurrentUser(res);
-  //     })
-  //     .catch((err) => {
-  //       console.log(`${err}`);
-  //     });
-  // }, [token])
-
-
-  // //INITIAL CARDS
-
-  // React.useEffect(() => {
-  //   api.getInitialCards()
-  //     .then(data => {
-  //       setCards(data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(`${err}`);
-  //     });
-  // }, [token])
-
-  function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
-    const handleLike = !isLiked ? api.addLike(card._id) : api.removeLike(card._id);
-
-    handleLike
-      .then((newCard) => {
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-      })
-      .catch(err => console.log(err));
-  }
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -222,10 +190,28 @@ function App() {
     setIsDeleteCardOpen(true);
   }
 
+
+  // CARD FUNCTIONALITY
+  function handleCardLike(card) {
+    console.log(card)
+    // const isLiked = card.likes !== undefined ? card.likes.some(i => i._id === currentUser._id) : false;
+    const isLiked = card.likes !== undefined ? card.likes.includes(currentUser._id) : false;
+    console.log(isLiked)
+    const handleLike = !isLiked ? api.addLike(card._id) : api.removeLike(card._id);
+    
+    handleLike
+      .then((newCard) => {
+        console.log(newCard)
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+      })
+      .catch(err => console.log(err));
+  }
+
   function handleDeleteCard() {
     api.removeCard(cardToBeDeleted)
       .then(() => {
         const newSetup = cards.filter((item) => item._id !== cardToBeDeleted);
+        console.log(newSetup)
         setCards(newSetup);
       })
       .catch((err) => {
@@ -254,7 +240,7 @@ function App() {
   function handleUpdateUser(userInfo) {
     api.editProfile({ ...userInfo })
       .then((data) => {
-        setCurrentUser({ ...data })
+        setCurrentUser({ ...data.data })
       })
       .catch((err) => {
         console.log(`${err}`);
@@ -264,7 +250,8 @@ function App() {
   function handleUpdateAvatar(avatarInput) {
     api.editAvatar(avatarInput.avatar)
       .then((data) => {
-        setCurrentUser({ ...data })
+        console.log(data)
+        setCurrentUser({ ...data.data })
       })
       .catch((err) => {
         console.log(`${err}`);
@@ -275,7 +262,7 @@ function App() {
     api.addCard({ ...newPlace })
       .then((data) => {
 
-        setCards([data, ...cards]);
+        setCards([...cards, data.data ]);
       })
       .catch((err) => {
         console.log(`${err}`);

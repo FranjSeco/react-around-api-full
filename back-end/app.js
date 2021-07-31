@@ -69,10 +69,10 @@ app.post('/signin', celebrate({
 }), login);
 
 
+
 // AUTH
 
 app.use(auth);
-app.use('/users/me', currentUser);
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
 

@@ -28,7 +28,6 @@ class Api {
     .then(this._responseCheck)
   }
 
-
   getServerInfo() {
     return Promise.all([this.getInitialCards(), this.getUserInfo()])
   }
@@ -72,7 +71,7 @@ class Api {
   }
 
   editAvatar(avatar) {
-      return fetch(this._baseUrl + '/users/me/avatar/', {
+      return fetch(this._baseUrl + '/users/me/avatar', {
           headers: this._headers,
           method: "PATCH",
           body: JSON.stringify({
@@ -85,7 +84,7 @@ class Api {
 
   // PUT https://around.nomoreparties.co/v1/groupId/cards/likes/cardId
   addLike(cardID) {
-    return fetch(this._baseUrl + "/cards/likes/" + cardID, {
+    return fetch(this._baseUrl + "/cards/" + cardID + "/likes/", {
       headers: this._headers,
       method: "PUT",
     })
@@ -95,7 +94,7 @@ class Api {
 
   // DELETE https://around.nomoreparties.co/v1/groupId/cards/likes/cardId
   removeLike(cardID) {
-    return fetch(this._baseUrl + "/cards/likes/" + cardID, {
+    return fetch(this._baseUrl + "/cards/" + cardID + "/likes/" , {
       headers: this._headers,
       method: "DELETE",
     })

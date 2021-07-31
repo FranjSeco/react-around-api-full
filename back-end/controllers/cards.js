@@ -44,7 +44,6 @@ const deleteCard = (req, res) => {
 };
 
 const likeCard = (req, res) => {
-  console.log(req.user._id);
   CardModel.findByIdAndUpdate(req.params._id,
     { $addToSet: { likes: req.user._id } }, // add _id to the array if it's not there yet
     { new: true })
@@ -52,7 +51,9 @@ const likeCard = (req, res) => {
       if (!card) {
         res.status(404).send({ message: 'Card not found' });
       }
-      res.status(200).send(card);
+        const { _doc: { ...props } } = card;
+        console.log(props)
+        return res.status(200).send(props);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -71,7 +72,9 @@ const dislikeCard = (req, res) => {
       if (!card) {
         res.status(404).send({ message: 'Card not found' });
       }
-      res.status(200).send(card);
+        const { _doc: { ...props } } = card;
+        console.log(props)
+        return res.status(200).send(props);
     })
     .catch((err) => {
       if (err.name === 'CastError') {

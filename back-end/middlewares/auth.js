@@ -31,6 +31,7 @@ const auth = (req, res, next) => {
       .send({ message: 'Authorization required' });
   }
   req.user = payload; // assigning the payload to the request object
+  console.log(payload)
   next(); // sending the request to the next middleware
 }
 

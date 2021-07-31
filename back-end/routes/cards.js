@@ -11,7 +11,7 @@ cardRouter.post('/', createCard);
 
 cardRouter.delete('/:_id', deleteCard);
 
-cardRouter.put('/:_id/likes', likeCard);
+cardRouter.put('/:_id/likes/', likeCard);
 
 cardRouter.delete('/:_id/likes', dislikeCard);
 

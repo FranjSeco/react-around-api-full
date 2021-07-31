@@ -5,7 +5,8 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext.js'
 
 
 function Main(props) {
-    const currentUser = React.useContext(CurrentUserContext);
+    console.log(props)
+    const currentUser = React.useContext(CurrentUserContext);   
 
     return (
         <main className="main">
@@ -27,14 +28,16 @@ function Main(props) {
             </section>
             <div className="elements">
                 {
-                    props.cards.map(
-                        (card, id) => (<Card
+                    props.cards.slice(0).reverse().map(
+                        (card, id) => (
+                            <Card
                             key={id}
                             card={card}
                             onClick={props.onCardClick}
                             onCardLike={props.onCardLike}
                             onDeleteCardPopup={props.onDeleteCardPopup}
-                        />))
+                        />
+                        ))
                 }
             </div>
             <Footer />

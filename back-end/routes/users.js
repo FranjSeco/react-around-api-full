@@ -11,7 +11,7 @@ const {
   getUser, getAllUsers, updateUser, updateAvatar, currentUser
 } = require('../controllers/users');
 
-// userRouter.get('/me', currentUser)
+userRouter.get('/me', currentUser);
 
 userRouter.get('/', getAllUsers);
 
@@ -21,26 +21,21 @@ userRouter.get('/:_id', celebrate({
   }),
 }), getUser);
 
-// userRouter.post('/', createUser);
-
-// userRouter.post('/', celebrate({
-//   body: Joi.object().keys({
-//     email: Joi.string().required().min(2).max(30),
-//     password: Joi.string().required().min(5),
-//   }),
-// }), createUser);
-
 userRouter.patch('/me', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
     about: Joi.string().required().min(2).max(30),
   }),
-}), updateUser);
+}),
+  updateUser);
 
 userRouter.patch('/me/avatar', celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required().custom(validateUrl),
+    avatar: Joi.string()
+      .uri({ scheme: ["http", "https"] })
+      .required(),
   }),
-}), updateAvatar);
+}),
+  updateAvatar);
 
 module.exports = userRouter;
