@@ -50,8 +50,8 @@ function App() {
 
   const api = new Api({
     // baseUrl: "https://around.nomoreparties.co/v1/group-7",
-    baseUrl: 'http://localhost:3000',
-    // baseUrl: "https://api.newus.students.nomoreparties.site",
+    // baseUrl: 'http://localhost:3000',
+    baseUrl: "https://api.newus.students.nomoreparties.site",
     headers: {
       'Authorization': `Bearer ${token}`,
       // authorization: "3199dd72-198f-4d27-96ce-739071f3c183",
@@ -115,15 +115,16 @@ function App() {
   const handleCheckTkn = () => {
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
-      auth.checkToken(jwt)
+      return auth.checkToken(jwt)
         .then((res) => {
           if (res) {
-            console.log(currentUser)
+            console.log(currentUser);
             setEmail(currentUser.email);
             setIsLoggedIn(true);
             history.push('/app');
             setToken(jwt);
           }
+          setIsLoggedIn(false);
         })
         .catch(err => console.log(err))
     } 

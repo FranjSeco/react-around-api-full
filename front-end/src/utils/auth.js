@@ -1,6 +1,6 @@
 // export const BASE_URL = 'https://register.nomoreparties.co';
-export const BASE_URL = 'http://localhost:3000';
-// export const BASE_URL = "https://api.newus.students.nomoreparties.site";
+// export const BASE_URL = 'http://localhost:3000';
+export const BASE_URL = "https://api.newus.students.nomoreparties.site";
 
 
 // const  responseCheck = (res) => {
@@ -10,10 +10,11 @@ export const BASE_URL = 'http://localhost:3000';
 export const register = (email, password) => {
     console.log(email, password)
     return fetch(`${BASE_URL}/signup`, {
+        mode: 'cors',
         method: 'POST',
         headers: {
-            Accept: "application/json",
-            'Content-Type': 'application/json'
+            'Accept': "application/json",
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password })
     })
@@ -31,7 +32,7 @@ export const authorize = (email, password) => {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email, password })
     })
