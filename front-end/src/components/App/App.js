@@ -194,7 +194,6 @@ function App() {
   // CARD FUNCTIONALITY
   function handleCardLike(card) {
     console.log(card)
-    // const isLiked = card.likes !== undefined ? card.likes.some(i => i._id === currentUser._id) : false;
     const isLiked = card.likes !== undefined ? card.likes.includes(currentUser._id) : false;
     console.log(isLiked)
     const handleLike = !isLiked ? api.addLike(card._id) : api.removeLike(card._id);
