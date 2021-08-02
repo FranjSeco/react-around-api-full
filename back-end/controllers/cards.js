@@ -8,7 +8,6 @@ const getCards = (req, res) => {
 
 const createCard = (req, res) => {
   const { name, link } = req.body;
-  console.log(req.user._id);
   CardModel.create({ name, link, owner: req.user._id })
     .then((card) => {
       if (!card) {
@@ -51,9 +50,8 @@ const likeCard = (req, res) => {
       if (!card) {
         res.status(404).send({ message: 'Card not found' });
       }
-        const { _doc: { ...props } } = card;
-        console.log(props)
-        return res.status(200).send(props);
+      const { _doc: { ...props } } = card;
+      return res.status(200).send(props);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -72,9 +70,8 @@ const dislikeCard = (req, res) => {
       if (!card) {
         res.status(404).send({ message: 'Card not found' });
       }
-        const { _doc: { ...props } } = card;
-        console.log(props)
-        return res.status(200).send(props);
+      const { _doc: { ...props } } = card;
+      return res.status(200).send(props);
     })
     .catch((err) => {
       if (err.name === 'CastError') {

@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
-const UserModel = require('../models/users');
 const jwt = require('jsonwebtoken');
+const UserModel = require('../models/users');
 
 const { NotFoundError } = require('../middlewares/errorHandling');
 
@@ -11,24 +11,22 @@ const currentUser = (req, res, next) => {
     // { name, about },
     // { runValidators: true, new: true },
   )
-    .then(user => {
-      console.log(user)
+    .then((user) => {
       if (!user) {
         throw new NotFoundError('No user with matching ID found');
       }
       const { _doc: { password, ...props } } = user;
       res.status(200).send({ data: props });
-
     })
     // .catch(err => res.send(err))
-    .catch(next)
-}
+    .catch(next);
+};
 
 const getAllUsers = (req, res, next) => {
   UserModel.find({})
     .then((users) => { res.status(200).send({ data: users }); })
     .catch((err) => { res.status(400).send(err); });
-}
+};
 
 const getUser = (req, res, next) => UserModel.findById(req.params._id)
   .then((user) => {
@@ -37,24 +35,19 @@ const getUser = (req, res, next) => UserModel.findById(req.params._id)
     }
     return res.status(200).send({ data: user });
   })
-  .catch(next)
+  .catch(next);
 
-const createUser = (req, res, next) => {
-  // const { name, about, avatar, email, password } = req.body;
-  return bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-      return UserModel.create({
-        name: req.body.name,
-        about: req.body.about,
-        avatar: req.body.avatar,
-        email: req.body.email,
-        password: hash
-      })
-    })
+const createUser = (req, res, next) =>
+  bcrypt.hash(req.body.password, 10)
+    .then((hash) => UserModel.create({
+      name: req.body.name,
+      about: req.body.about,
+      avatar: req.body.avatar,
+      email: req.body.email,
+      password: hash,
+    }))
     .then((user) => res.status(200).send({ data: user }))
-    .catch(next)
-};
-
+    .catch(next);
 const updateUser = (req, res, next) => {
   const { name, about } = req.body;
   UserModel.findByIdAndUpdate(
@@ -68,15 +61,14 @@ const updateUser = (req, res, next) => {
       }
       return res.status(200).send({ data: user });
     })
-    .catch(next)
+    .catch(next);
 };
 
 const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
   UserModel.findByIdAndUpdate(req.user._id,
     { avatar },
-    { runValidators: true, new: true }
-    )
+    { runValidators: true, new: true })
     .then((user) => {
       if (!user) {
         throw new NotFoundError('No user with matching ID found');
@@ -85,7 +77,7 @@ const updateAvatar = (req, res, next) => {
         res.status(200).send({ data: props });
       }
     })
-    .catch(next)
+    .catch(next);
 };
 
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -93,26 +85,24 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 const login = (req, res, next) => {
   const { email, password } = req.body;
   return UserModel.findUserByCredentials(email, password)
-    .then( async (user) => {
+    .then(async (user) => {
       const match = await bcrypt.compare(password, user.password);
       // authentication successful! user is in the user variable
       const token = jwt.sign({ _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         { expiresIn: '7d' });
 
-      res.cookie("jwt", token, {
+      res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
       });
 
       return match
         ? res.send({ token })
-        : Promise.reject(new UnauthorizedError('Incorrect password or email'));
-
-
+        : Promise.reject(new Error('Incorrect password or email'));
     })
-    .catch(next)
-}
+    .catch(next);
+};
 
 module.exports = {
   getAllUsers,
@@ -121,5 +111,5 @@ module.exports = {
   updateUser,
   updateAvatar,
   login,
-  currentUser
+  currentUser,
 };
