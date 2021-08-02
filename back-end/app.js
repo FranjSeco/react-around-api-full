@@ -44,13 +44,13 @@ app.use(helmet());
 //   next();
 // });
 
-
-// const corsOptions = {
-//   origin: 'https://newus.students.nomoreparties.site',
-//   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-// }
-
 app.use(requestLogger);
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Server will crash now');
+  }, 0);
+});
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
