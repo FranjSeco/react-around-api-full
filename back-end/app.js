@@ -3,7 +3,7 @@ const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 const { celebrate, Joi, errors } = require('celebrate');
-const cors = require('cors');
+
 const auth = require('./middlewares/auth');
 
 const { BadRequest, NotAllowed } = require('./middlewares/errorHandling');
@@ -29,10 +29,9 @@ mongoose.connect('mongodb://localhost:27017/api-full', {
   useUnifiedTopology: true,
 });
 
+const cors = require('cors');
 app.use(express.json());
 
-app.use(cors());
-app.options('*', cors());
 app.use(helmet());
 
 // app.use((req, res, next) => {
@@ -46,11 +45,19 @@ app.use(helmet());
 
 app.use(requestLogger);
 
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Server will crash now');
-  }, 0);
-});
+// app.all('/', function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//   next()
+// });
+// app.get('/crash-test', () => {
+//   setTimeout(() => {
+//     throw new Error('Server will crash now');
+//   }, 0);
+// });
+
+app.use(cors());
+// app.options('*', cors());
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({

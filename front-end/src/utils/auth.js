@@ -3,14 +3,8 @@
 export const BASE_URL = "https://api.newus.students.nomoreparties.site";
 
 
-// const  responseCheck = (res) => {
-//     return res.ok ? res.json() : Promise.reject(`Error!` + res.statusText);
-// }
-
 export const register = (email, password) => {
-    console.log(email, password)
     return fetch(`${BASE_URL}/signup`, {
-        mode: 'cors',
         method: 'POST',
         headers: {
             'Accept': "application/json",
@@ -55,8 +49,11 @@ export const checkToken = (token) => {
             'Authorization': `Bearer ${token}`,
         }
     })
-        .then(res => {
+        .then((res) => {
             return res.json()
+        })
+        .then(data => {
+            return data;
         })
         .catch(err => console.log(err))
 }

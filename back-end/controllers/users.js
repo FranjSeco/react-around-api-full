@@ -28,7 +28,9 @@ const getAllUsers = (req, res, next) => {
     .catch((err) => { res.status(400).send(err); });
 };
 
-const getUser = (req, res, next) => UserModel.findById(req.params._id)
+const getUser = (req, res, next) => {
+
+UserModel.findById(req.params._id)
   .then((user) => {
     if (!user) {
       throw new NotFoundError('No user with matching ID found');
@@ -36,8 +38,8 @@ const getUser = (req, res, next) => UserModel.findById(req.params._id)
     return res.status(200).send({ data: user });
   })
   .catch(next);
-
-const createUser = (req, res, next) =>
+}
+const createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
     .then((hash) => UserModel.create({
       name: req.body.name,
@@ -48,6 +50,8 @@ const createUser = (req, res, next) =>
     }))
     .then((user) => res.status(200).send({ data: user }))
     .catch(next);
+};
+
 const updateUser = (req, res, next) => {
   const { name, about } = req.body;
   UserModel.findByIdAndUpdate(
@@ -85,9 +89,7 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 const login = (req, res, next) => {
   const { email, password } = req.body;
   return UserModel.findUserByCredentials(email, password)
-    .then(async (user) => {
-      const match = await bcrypt.compare(password, user.password);
-      // authentication successful! user is in the user variable
+    .then((user) => {
       const token = jwt.sign({ _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         { expiresIn: '7d' });
@@ -97,9 +99,7 @@ const login = (req, res, next) => {
         httpOnly: true,
       });
 
-      return match
-        ? res.send({ token })
-        : Promise.reject(new Error('Incorrect password or email'));
+      return res.send({ token });
     })
     .catch(next);
 };

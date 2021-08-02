@@ -1,10 +1,6 @@
 /* eslint-disable no-undef */
 const userRouter = require('express').Router();
 
-function validateUrl(string) {
-  return validator.isURL(string);
-}
-
 const { celebrate, Joi } = require('celebrate');
 
 const {
@@ -33,7 +29,6 @@ userRouter.patch('/me/avatar', celebrate({
   body: Joi.object().keys({
     avatar: Joi.string()
       .uri({ scheme: ['http', 'https'] })
-      .custom(validateUrl)
       .required(),
   }),
 }),

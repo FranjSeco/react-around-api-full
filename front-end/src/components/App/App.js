@@ -114,21 +114,17 @@ function App() {
       auth.checkToken(jwt)
         .then((res) => {
           if (res) {
-            setEmail(currentUser.email);
+            setEmail(res.data.email);
             setIsLoggedIn(true);
             history.push('/app');
             setToken(jwt);
-            return
+            return;
           }
           setIsLoggedIn(false);
         })
         .catch(err => console.log(err))
     } 
   }
-
-  React.useEffect(() => {
-    handleCheckTkn();
-  }, [])
 
   const handleEmail = (x) => {
     setEmail(x);
