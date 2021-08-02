@@ -59,11 +59,9 @@ function App() {
     }
   });
 
-  // PAGE
-  // const handleLogin = () => {
-  //   setIsLoggedIn(true);
-  //   handleCheckTkn();
-  // }
+  React.useEffect(() => {
+    handleCheckTkn();
+  }, [])
 
   const handleRegistration = (email, password) => {
     if (email && password) {
@@ -74,7 +72,6 @@ function App() {
             history.push('/signin')
             return res;
           } else {
-            console.log(res.data)
             setCurrentUser(res.data);
             handleSuccess(true);
             history.push('/signin');
@@ -103,7 +100,6 @@ function App() {
           history.push('/app');
           return;
         }
-        console.log('not loged')
         history.push('/signup');
       })
       .catch(err => {
@@ -115,14 +111,14 @@ function App() {
   const handleCheckTkn = () => {
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
-      return auth.checkToken(jwt)
+      auth.checkToken(jwt)
         .then((res) => {
           if (res) {
-            console.log(currentUser);
             setEmail(currentUser.email);
             setIsLoggedIn(true);
             history.push('/app');
             setToken(jwt);
+            return
           }
           setIsLoggedIn(false);
         })
@@ -159,7 +155,6 @@ function App() {
     if (token) {
       api.getUserInfo()
         .then(res => {
-          console.log(res)
           setCurrentUser(res.data);
         })
         .catch((err) => {
@@ -194,14 +189,11 @@ function App() {
 
   // CARD FUNCTIONALITY
   function handleCardLike(card) {
-    console.log(card)
     const isLiked = card.likes !== undefined ? card.likes.includes(currentUser._id) : false;
-    console.log(isLiked)
     const handleLike = !isLiked ? api.addLike(card._id) : api.removeLike(card._id);
     
     handleLike
       .then((newCard) => {
-        console.log(newCard)
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
       })
       .catch(err => console.log(err));
@@ -211,7 +203,6 @@ function App() {
     api.removeCard(cardToBeDeleted)
       .then(() => {
         const newSetup = cards.filter((item) => item._id !== cardToBeDeleted);
-        console.log(newSetup)
         setCards(newSetup);
       })
       .catch((err) => {
@@ -250,7 +241,6 @@ function App() {
   function handleUpdateAvatar(avatarInput) {
     api.editAvatar(avatarInput.avatar)
       .then((data) => {
-        console.log(data)
         setCurrentUser({ ...data.data })
       })
       .catch((err) => {

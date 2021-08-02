@@ -13,7 +13,6 @@ function Card({card, onClick, onCardLike, onDeleteCardPopup}) {
   function handleDeleteClick() {
     onDeleteCardPopup(card._id);
   }
-  console.log(card)
   const userInfo = React.useContext(CurrentUserContext); 
   const isOwned = userInfo._id === card.owner;
   const isLiked = card.likes !== undefined ? card.likes.includes(userInfo._id) : false;
