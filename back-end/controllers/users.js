@@ -2,7 +2,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const UserModel = require('../models/users');
 
-const { NotFoundError } = require('../middlewares/errorHandling');
+const NotFoundError = require('../errors/NotFound');
+const NotAuthorized = require('../errors/NotAuthorized')
 
 const currentUser = (req, res, next) => {
   // const {name, about} = req.body;
@@ -24,12 +25,13 @@ const currentUser = (req, res, next) => {
 
 const getAllUsers = (req, res, next) => {
   UserModel.find({})
-    .then((users) => { res.status(200).send({ data: users }); })
-    .catch((err) => { res.status(400).send(err); });
+    .then((users) => {
+      res.status(200).send({ data: users });
+    })
+    .catch(next);
 };
 
 const getUser = (req, res, next) => {
-
 UserModel.findById(req.params._id)
   .then((user) => {
     if (!user) {
@@ -90,6 +92,10 @@ const login = (req, res, next) => {
   const { email, password } = req.body;
   return UserModel.findUserByCredentials(email, password)
     .then((user) => {
+      if (!user) {
+        throw new NotAuthorized('Not Authorized');
+      }
+
       const token = jwt.sign({ _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         { expiresIn: '7d' });

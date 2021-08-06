@@ -6,7 +6,10 @@ const { celebrate, Joi, errors } = require('celebrate');
 
 const auth = require('./middlewares/auth');
 
-const { BadRequest, NotAllowed } = require('./middlewares/errorHandling');
+const BadRequest = require('./errors/BadRequest');
+const NotFoundError = require('./errors/NotFound')
+const NotAuthorized = require('./errors/NotAuthorized');
+const ConflictError = require('./errors/ConflictError')
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 require('dotenv').config();
@@ -30,6 +33,7 @@ mongoose.connect('mongodb://localhost:27017/api-full', {
 });
 
 const cors = require('cors');
+const { NotFoundError } = require('./errors/NotFound');
 app.use(express.json());
 
 app.use(helmet());
@@ -45,30 +49,18 @@ app.use(helmet());
 
 app.use(requestLogger);
 
-// app.all('/', function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "X-Requested-With");
-//   next()
-// });
-// app.get('/crash-test', () => {
-//   setTimeout(() => {
-//     throw new Error('Server will crash now');
-//   }, 0);
-// });
-
 app.use(cors());
-// app.options('*', cors());
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().min(2).max(30),
+    email: Joi.string().required().email(),
     password: Joi.string().required().min(5),
   }).unknown(true),
 }), createUser);
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().min(2).max(30),
+    email: Joi.string().required().email(),
     password: Joi.string().required().min(5),
   }).unknown(true),
 }), login);
@@ -80,14 +72,14 @@ app.use('/users', userRouter);
 app.use('/cards', cardRouter);
 
 app.get('*', (req, res) => {
-  res.status(404).send({ message: 'Requested resource not found' });
+  throw new NotFoundError('Requested resource not found');
 });
 
 app.use((err, req, res, next) => {
   if (err.statusCode === 500) {
     res.status(500).send({ message: 'An error occurred on the server' });
   } else if (err.statusCode === 401) {
-    throw new NotAllowed('Something went wrong');
+    throw new NotAuthorized('Something went wrong');
   } else if (err.statusCode === 400) {
     throw new BadRequest('Bad Request');
   }
@@ -95,6 +87,8 @@ app.use((err, req, res, next) => {
 
 app.use(errorLogger); // enabling the error logger
 app.use(errors()); // celebrate error handler
+app.use(ConflictError);
+
 app.listen(PORT, () => {
   console.log(`Link to the server: ${PORT}`);
 });
