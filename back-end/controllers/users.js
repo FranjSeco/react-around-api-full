@@ -51,7 +51,7 @@ const createUser = (req, res, next) => {
       email: req.body.email,
       password: hash,
     }))
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => res.status(200).send({ _id: user._id, email: user.email }))
     .catch(next);
 };
 
