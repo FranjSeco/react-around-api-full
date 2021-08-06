@@ -1,15 +1,14 @@
 /* eslint-disable no-undef */
 const cardRouter = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-const validator = require("validator");
+const validator = require('validator');
 
 const method = (value) => {
-  let result = validator.isURL(value);
+  const result = validator.isURL(value);
   if (result) {
     return value;
-  } else {
-    throw new Error('URL validation err');
   }
+  throw new Error('URL validation err');
 };
 
 const {

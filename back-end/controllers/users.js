@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const UserModel = require('../models/users');
 
 const NotFoundError = require('../errors/NotFound');
-const NotAuthorized = require('../errors/NotAuthorized')
+const NotAuthorized = require('../errors/NotAuthorized');
 
 const currentUser = (req, res, next) => {
   // const {name, about} = req.body;
@@ -16,7 +16,7 @@ const currentUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('No user with matching ID found');
       }
-      const { _doc: { password, ...props } } = user;
+      const { _doc: { ...props } } = user;
       res.status(200).send({ data: props });
     })
     // .catch(err => res.send(err))
@@ -32,15 +32,16 @@ const getAllUsers = (req, res, next) => {
 };
 
 const getUser = (req, res, next) => {
-UserModel.findById(req.params._id)
-  .then((user) => {
-    if (!user) {
-      throw new NotFoundError('No user with matching ID found');
-    }
-    return res.status(200).send({ data: user });
-  })
-  .catch(next);
-}
+  UserModel.findById(req.params._id)
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('No user with matching ID found');
+      }
+      return res.status(200).send({ data: user });
+    })
+    .catch(next);
+};
+
 const createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
     .then((hash) => UserModel.create({

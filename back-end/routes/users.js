@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 const userRouter = require('express').Router();
-const validator = require("validator");
+const validator = require('validator');
 const { celebrate, Joi } = require('celebrate');
 
 const {
@@ -8,14 +8,12 @@ const {
 } = require('../controllers/users');
 
 const method = (value) => {
-  let result = validator.isURL(value);
-  if(result) {
+  const result = validator.isURL(value);
+  if (result) {
     return value;
-  } else {
-    throw new Error('URL validation err');
   }
+  throw new Error('URL validation err');
 };
-
 
 userRouter.get('/me', currentUser);
 
@@ -32,14 +30,12 @@ userRouter.patch('/me', celebrate({
     name: Joi.string().required().min(2).max(30),
     about: Joi.string().required().min(2).max(30),
   }),
-}),
-updateUser);
+}), updateUser);
 
 userRouter.patch('/me/avatar', celebrate({
   body: Joi.object().keys({
     avatar: Joi.string().required().custom(method),
   }),
-}),
-updateAvatar);
+}), updateAvatar);
 
 module.exports = userRouter;

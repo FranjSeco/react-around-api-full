@@ -22,7 +22,7 @@ const deleteCard = (req, res) => {
   CardModel.findByIdAndRemove(req.params._id)
     .then((card) => {
       if (!card) {
-        throw new NotFoundError("Card not found");
+        throw new NotFoundError('Card not found');
       } else if (!card.owner._id === req.user._id) {
         throw new NotAuthorizedError('Not Authorized');
       } else {
@@ -41,7 +41,7 @@ const likeCard = (req, res) => {
     { new: true })
     .then((card) => {
       if (!card) {
-        throw new NotFoundError("Card not found");
+        throw new NotFoundError('Card not found');
       }
       const { _doc: { ...props } } = card;
       return res.status(200).send(props);
@@ -57,7 +57,7 @@ const dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        throw new NotFoundError("Card not found");
+        throw new NotFoundError('Card not found');
       }
       const { _doc: { ...props } } = card;
       return res.status(200).send(props);

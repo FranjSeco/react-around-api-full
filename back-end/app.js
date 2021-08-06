@@ -3,13 +3,13 @@ const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 const { celebrate, Joi, errors } = require('celebrate');
-
+const cors = require('cors');
 const auth = require('./middlewares/auth');
 
 const BadRequest = require('./errors/BadRequest');
-const NotFoundError = require('./errors/NotFound')
+const NotFoundError = require('./errors/NotFound');
 const NotAuthorized = require('./errors/NotAuthorized');
-const ConflictError = require('./errors/ConflictError')
+const ConflictError = require('./errors/ConflictError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 require('dotenv').config();
@@ -32,8 +32,6 @@ mongoose.connect('mongodb://localhost:27017/api-full', {
   useUnifiedTopology: true,
 });
 
-const cors = require('cors');
-const { NotFoundError } = require('./errors/NotFound');
 app.use(express.json());
 
 app.use(helmet());
@@ -71,7 +69,7 @@ app.use(auth);
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
 
-app.get('*', (req, res) => {
+app.get('*', () => {
   throw new NotFoundError('Requested resource not found');
 });
 
