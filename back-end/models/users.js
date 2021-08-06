@@ -53,10 +53,8 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(email,
 
           // return res.status(200).send({email}); // now user is available
           return user;
-        })
-        .catch(next);
-    })
-    .catch(next);
+        });
+    });
 };
 
 module.exports = mongoose.model('user', userSchema);

@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const NotAuthorized = require('../errors/NotAuthorized');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -8,9 +9,8 @@ const auth = (req, res, next) => {
 
   // let's check the header exists and starts with 'Bearer '
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    return res
-      .status(401)
-      .send({ message: 'Authorization required' });
+    next(new NotAuthorized('Not Authorized'));
+    return;
   }
   // getting the token
   const token = authorization.replace('Bearer ', '');
@@ -25,9 +25,7 @@ const auth = (req, res, next) => {
     );
   } catch (err) {
     // we return an error if something goes wrong
-    return res
-      .status(401)
-      .send({ message: 'Authorization required' });
+    next(new NotAuthorized('Not Authorized'));
   }
   req.user = payload; // assigning the payload to the request object
 
