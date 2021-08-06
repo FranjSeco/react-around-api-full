@@ -9,7 +9,6 @@ const auth = require('./middlewares/auth');
 const BadRequest = require('./errors/BadRequest');
 const NotFoundError = require('./errors/NotFound');
 const NotAuthorized = require('./errors/NotAuthorized');
-const ConflictError = require('./errors/ConflictError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 require('dotenv').config();
@@ -73,19 +72,28 @@ app.get('*', () => {
   throw new NotFoundError('Requested resource not found');
 });
 
-app.use((err, req, res, next) => {
-  if (err.statusCode === 500) {
-    res.status(500).send({ message: 'An error occurred on the server' });
-  } else if (err.statusCode === 401) {
-    throw new NotAuthorized('Something went wrong');
-  } else if (err.statusCode === 400) {
-    throw new BadRequest('Bad Request');
-  }
-});
+// app.use((err, req, res, next) => {
+//   if (err.statusCode === 500) {
+//     res.status(500).send({ message: 'An error occurred on the server' });
+//   } else if (err.statusCode === 401) {
+//     throw new NotAuthorized('Something went wrong');
+//   } else if (err.statusCode === 400) {
+//     throw new BadRequest('Bad Request');
+//   }
+// });
 
 app.use(errorLogger); // enabling the error logger
 app.use(errors()); // celebrate error handler
-app.use(ConflictError);
+app.use((err, req, res, next) => {
+  let { statusCode = 500 } = err;
+  if (err.name === 'ValidationError') statusCode = 400;
+  else if (err.name === 'MongoError' && err.code === 11000) statusCode = 409;
+  else if (err.name === 'Error') statusCode = 401;
+
+  const { message = 'An error occurred on the server' } = err;
+
+  res.status(statusCode).send({ message });
+});
 
 app.listen(PORT, () => {
   console.log(`Link to the server: ${PORT}`);
