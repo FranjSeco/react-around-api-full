@@ -52,10 +52,11 @@ const createUser = (req, res, next) => {
       password: hash,
     }))
     .then((user) => res.status(200).send({
+      _id: user._id,
       name: user.name,
       about: user.about,
       avatar: user.avatar,
-      email: user.email
+      email: user .email
     }))
     .catch(next);
 };
