@@ -6,9 +6,7 @@ const { celebrate, Joi, errors } = require('celebrate');
 const cors = require('cors');
 const auth = require('./middlewares/auth');
 
-const BadRequest = require('./errors/BadRequest');
 const NotFoundError = require('./errors/NotFound');
-const NotAuthorized = require('./errors/NotAuthorized');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 require('dotenv').config();

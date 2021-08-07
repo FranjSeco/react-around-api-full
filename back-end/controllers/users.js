@@ -16,7 +16,7 @@ const currentUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('No user with matching ID found');
       }
-      const { _doc: { password, ...props } } = user;
+      const { _doc: { ...props } } = user;
       res.status(200).send({ data: props });
     })
     // .catch(err => res.send(err))
@@ -51,7 +51,12 @@ const createUser = (req, res, next) => {
       email: req.body.email,
       password: hash,
     }))
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => res.status(200).send({
+      name: user.name,
+      about: user.about,
+      avatar: user.avatar,
+      email: user.email
+    }))
     .catch(next);
 };
 

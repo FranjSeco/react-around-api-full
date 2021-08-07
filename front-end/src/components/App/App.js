@@ -50,8 +50,8 @@ function App() {
 
   const api = new Api({
     // baseUrl: "https://around.nomoreparties.co/v1/group-7",
-    // baseUrl: 'http://localhost:3000',
-    baseUrl: "https://api.newus.students.nomoreparties.site",
+    baseUrl: 'http://localhost:3000',
+    // baseUrl: "https://api.newus.students.nomoreparties.site",
     headers: {
       'Authorization': `Bearer ${token}`,
       // authorization: "3199dd72-198f-4d27-96ce-739071f3c183",
@@ -67,7 +67,10 @@ function App() {
     if (email && password) {
       auth.register(email, password)
         .then(res => {
-          if (!res) {
+          if (res.message) {
+            alert('Email already exists!')
+            history.push('/signin')
+          } else if (!res) {
             handleSuccess(false);
             history.push('/signin')
             return res;
@@ -123,7 +126,7 @@ function App() {
           setIsLoggedIn(false);
         })
         .catch(err => console.log(err))
-    } 
+    }
   }
 
   const handleEmail = (x) => {
@@ -187,7 +190,7 @@ function App() {
   function handleCardLike(card) {
     const isLiked = card.likes !== undefined ? card.likes.includes(currentUser._id) : false;
     const handleLike = !isLiked ? api.addLike(card._id) : api.removeLike(card._id);
-    
+
     handleLike
       .then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
@@ -248,7 +251,7 @@ function App() {
     api.addCard({ ...newPlace })
       .then((data) => {
 
-        setCards([...cards, data.data ]);
+        setCards([...cards, data.data]);
       })
       .catch((err) => {
         console.log(`${err}`);
