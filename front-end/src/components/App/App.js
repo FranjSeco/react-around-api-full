@@ -75,7 +75,8 @@ function App() {
             history.push('/signin')
             return res;
           } else {
-            setCurrentUser(res.data);
+            console.log(res)
+            setCurrentUser(res);
             handleSuccess(true);
             history.push('/signin');
             return res;
