@@ -68,7 +68,6 @@ function App() {
       auth.register(email, password)
         .then(res => {
           if (res.message) {
-            alert('Email already exists!')
             history.push('/signin')
           } else if (!res) {
             handleSuccess(false);
