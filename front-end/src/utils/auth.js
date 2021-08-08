@@ -1,6 +1,6 @@
 // export const BASE_URL = 'https://register.nomoreparties.co';
-export const BASE_URL = 'http://localhost:3000';
-// export const BASE_URL = "https://api.newus.students.nomoreparties.site";
+// export const BASE_URL = 'http://localhost:3000';
+export const BASE_URL = "https://api.newus.students.nomoreparties.site";
 
 
 export const register = (email, password) => {
