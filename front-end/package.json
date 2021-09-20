@@ -16,7 +16,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "deploy": "npm run build && scp -r ./build/* franjseco@newus.students.nomoreparties.site:/home/franjseco/front-end",
+    "deploy": "npm run build && scp -r ./build/* franjseco@aroundtheus.students.nomoreparties.site:/home/franjseco/front-end",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

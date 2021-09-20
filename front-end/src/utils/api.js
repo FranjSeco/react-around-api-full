@@ -53,7 +53,6 @@ class Api {
       method: "DELETE",
     })
     .then(this._responseCheck)
-
   }
 
   // PATCH https://around.nomoreparties.co/v1/groupId/users/me
