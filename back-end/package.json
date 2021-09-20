@@ -9,7 +9,7 @@
     "dev": "nodemon app.js",
     "debugger": "node --inspect-brk app.js",
     "lint": "eslint .",
-    "deploy": "scp -r ./* franjseco@newus.students.nomoreparties.site:/home/franjseco/back-end"
+    "deploy": "scp -r ./* franjseco@aroundtheus.students.nomoreparties.site:/home/franjseco/back-end"
   },
   "repository": {
     "type": "git",

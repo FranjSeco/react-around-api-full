@@ -5,4 +5,4 @@ This repository contains the full API of "Around the U.S." project that features
 
 
 * https://github.com/FranjSeco/react-around-api-full
-* https://www.newus.students.nomoreparties.site/
+* https://www.aroundtheus.students.nomoreparties.site/
