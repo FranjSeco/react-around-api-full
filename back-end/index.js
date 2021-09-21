@@ -18,11 +18,24 @@ const {
   createUser, login,
 } = require('./controllers/users');
 
-const { PORT = 3000 } = process.env;
+// const { PORT = 3000 } = process.env;
+// const { MDB_SECRET } = process.env;
 
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/api-full', {
+// mongoose.connect('mongodb://localhost:27017/api-full', {
+//   useNewUrlParser: true,
+//   useCreateIndex: true,
+//   useFindAndModify: false,
+//   useUnifiedTopology: true,
+// });
+// mongoose.connect(`mongodb+srv://franjseco:${MDB_SECRET}@around-us.p03zn.mongodb.net/around-us?retryWrites=true&w=majority`, {
+//   useNewUrlParser: true,
+//   useCreateIndex: true,
+//   useFindAndModify: false,
+//   useUnifiedTopology: true,
+// });
+mongoose.connect(`mongodb+srv://franjseco:seco1987@around-us.mpngy.mongodb.net/around-us?retryWrites=true&w=majority`, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -93,6 +106,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).send({ message });
 });
 
-app.listen(PORT, () => {
-  console.log(`Link to the server: ${PORT}`);
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`Link to the server: ${process.env.PORT || 3000}`);
 });
