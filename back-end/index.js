@@ -19,7 +19,7 @@ const {
 } = require('./controllers/users');
 
 // const { PORT = 3000 } = process.env;
-// const { MDB_SECRET } = process.env;
+const { MDB_SECRET } = process.env;
 
 const app = express();
 
