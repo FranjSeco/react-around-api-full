@@ -16,6 +16,13 @@
   position: relative;
   top: 0;
   left: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 880px) {
+  .header {
+    padding: 0 27px 0 27px;
+  }
 }
 
 @media (max-width: 650px) {

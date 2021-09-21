@@ -29,6 +29,7 @@ const app = express();
 //   useFindAndModify: false,
 //   useUnifiedTopology: true,
 // });
+
 mongoose.connect(`mongodb+srv://franjseco4:${MDB_SECRET}@around-us.mpngy.mongodb.net/around-us?retryWrites=true&w=majority`, {
   useNewUrlParser: true,
   useCreateIndex: true,

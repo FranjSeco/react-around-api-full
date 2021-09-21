@@ -6,11 +6,11 @@
   background-size: contain;
 }
 
-@media (max-width: 880px) {
+/* @media (max-width: 880px) {
   .header__logo {
     margin-left: 27px;
   }
-}
+} */
 
 @media (max-width: 650px) {
   .header__logo {

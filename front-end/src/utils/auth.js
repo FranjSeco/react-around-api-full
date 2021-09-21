@@ -1,6 +1,7 @@
 // export const BASE_URL = 'https://register.nomoreparties.co';
-export const BASE_URL = 'http://localhost:3000';
+// export const BASE_URL = 'http://localhost:3000';
 // export const BASE_URL = "https://api.aroundtheus.students.nomoreparties.site";
+export const BASE_URL = "https://around-us-api.herokuapp.com";
 
 
 export const register = (email, password) => {

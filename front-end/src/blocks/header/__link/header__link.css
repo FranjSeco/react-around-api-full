@@ -9,6 +9,7 @@
   color: #ffffff;
   text-decoration: none;
   align-self: center;
+  padding: 0;
 }
 
 @media (max-width: 320px) {

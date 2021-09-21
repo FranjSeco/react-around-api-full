@@ -1,13 +1,17 @@
 .header__loggedin {
   position: absolute;
-  right: 30px;
+  right: 0;
   bottom: 10px;
   display: flex;
   justify-content: space-between;
   margin: 0 0 10px 0;
 }
 
-
+@media (max-width: 880px) {
+  .header__loggedin {
+    right: 27px;
+  }
+}
 
 @media (max-width: 600px) {
   .header__loggedin {
